@@ -1,4 +1,6 @@
-# Botched RPG
+![image](https://user-images.githubusercontent.com/16431607/113442534-1ccfac80-93e8-11eb-9692-1f2e37ef37b2.png)
+
+# Description
 This is a gamemode inspired by MMO/RPG/GACHA games. The main goal is to grind and progress your character like many other RPG games, there isn't really a story as I wanted to focus on the coding and just making it fun to play without a story. The gamemode contains quests, monsters, levelling and crafting.
 
 # Why did I make this gamemode?
@@ -27,6 +29,10 @@ With this gamemode I wanted to make it feel less like Garry's Mod, to do this I 
 ![image](https://user-images.githubusercontent.com/16431607/113442308-bb0f4280-93e7-11eb-90f3-7779007a64a8.png)
 ![image](https://user-images.githubusercontent.com/16431607/113442322-bfd3f680-93e7-11eb-87ba-e007d049ac97.png)
 ![image](https://user-images.githubusercontent.com/16431607/113442343-c6626e00-93e7-11eb-940e-cafecb9a9c61.png)
+
+# Discord
+There are quite a few development screenshots/videos in there, I also have a server that might go up every now and then for testing.
+https://discord.gg/NAaTvpK8vQ
 
 
 
