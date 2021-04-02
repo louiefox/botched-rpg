@@ -1,0 +1,7 @@
+"botched"
+{
+	"base"		"base"
+	"title"		"Botched RPG"
+	"category"	"pve"
+	"menusystem"	"1"
+}
