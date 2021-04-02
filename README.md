@@ -18,3 +18,19 @@ With this gamemode I wanted to make it feel less like Garry's Mod, to do this I 
 - Characters - never fully finished this, characters were selectable, in the end I would have wanted abilities to be bound to the selected character to therefore make selecting characters not just based on cosmetic but on actual skills etc.
 - Map - this was fairly new to me as I wanted to make the map procedurally generated so that I could possibly re use the system in the future, I found a map addon on the workshop (https://steamcommunity.com/sharedfiles/filedetails/?id=1124240829) but unfortunately that didnt cover much of the map and didnt have zooming or locations etc, so I made my own using some of the code in the workshop map, although it wasnt perfect I was still fairly happy with it.
 - Equipment - I liked this system as players could get equipment and then rankup the equipment and increase the stats of it even if it was some really basic equipment that they started with, however the mechanic that I disliked was the fact that the player could only own one piece of that equipment, this made it feel less like an open world game and more restricted.
+
+# Screenshots
+![image](https://user-images.githubusercontent.com/16431607/113442260-a2069180-93e7-11eb-89d4-55b315d042d4.png)
+![image](https://user-images.githubusercontent.com/16431607/113442289-afbc1700-93e7-11eb-8e6e-54f66fe28cb0.png)
+![image](https://user-images.githubusercontent.com/16431607/113442292-b3e83480-93e7-11eb-8153-6dd13ca5ccde.png)
+![image](https://user-images.githubusercontent.com/16431607/113442301-b6e32500-93e7-11eb-9e95-795369a24c3c.png)
+![image](https://user-images.githubusercontent.com/16431607/113442308-bb0f4280-93e7-11eb-90f3-7779007a64a8.png)
+![image](https://user-images.githubusercontent.com/16431607/113442322-bfd3f680-93e7-11eb-87ba-e007d049ac97.png)
+![image](https://user-images.githubusercontent.com/16431607/113442343-c6626e00-93e7-11eb-940e-cafecb9a9c61.png)
+
+
+
+
+
+
+
