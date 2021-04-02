@@ -1,2 +1,2 @@
-# botched-rpg
+# Botched-RPG
 Test
