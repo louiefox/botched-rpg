@@ -1,6 +1,4 @@
-![image](https://user-images.githubusercontent.com/16431607/113442534-1ccfac80-93e8-11eb-9692-1f2e37ef37b2.png)
-
-# Description
+# Botched RPG
 This is a gamemode inspired by MMO/RPG/GACHA games. The main goal is to grind and progress your character like many other RPG games, there isn't really a story as I wanted to focus on the coding and just making it fun to play without a story. The gamemode contains quests, monsters, levelling and crafting.
 
 # Why did I make this gamemode?
