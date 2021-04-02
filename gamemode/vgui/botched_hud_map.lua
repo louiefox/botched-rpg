@@ -1,6 +1,13 @@
 local PANEL = {}
 
 function PANEL:Init()
+    local mapTable = BOTCHED.TEMP.Map
+    if( not mapTable or not mapTable.SizeHeight or not mapTable.SizeW or not mapTable.SizeE or not mapTable.SizeS or not mapTable.SizeN ) then 
+        net.Start( "Botched.RequestMapSize" )
+        net.SendToServer()
+        return 
+    end
+
     self:SetSize( ScrH()*0.2, ScrH()*0.2 )
 
     self.mapBack = vgui.Create( "DPanel", self )
@@ -152,6 +159,8 @@ function PANEL:Paint( w, h )
 
     BOTCHED.FUNC.DrawCircle( w/2, h/2, h/2, BOTCHED.FUNC.GetTheme( 2, 100 ) )	
 
+    if( not IsValid( self.mapMovePanel ) ) then return end
+    
     render.ClearStencil()
     render.SetStencilEnable( true )
 

@@ -148,6 +148,15 @@ net.Receive( "Botched.SendMapSize", function()
         end
     
         BOTCHED_MAPMENU = vgui.Create( "botched_popup_map" )
+
+        if( IsValid( BOTCHED_HUD ) ) then
+            if( IsValid( BOTCHED_HUD.map ) ) then
+                BOTCHED_HUD.map:Remove()
+            end
+        
+            BOTCHED_HUD.map = vgui.Create( "botched_hud_map", BOTCHED_HUD )
+            BOTCHED_HUD.map:SetPos( 25, 25 )
+        end
     end )
 end )
 
