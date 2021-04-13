@@ -20,6 +20,7 @@ include( "cl_panelmeta.lua" )
 include( "cl_rewards.lua" )
 include( "cl_map.lua" )
 include( "cl_characters.lua" )
+include( "cl_party_system.lua" )
 
 -- VGUI LOAD --
 for k, v in pairs( file.Find( GM.FolderName .. "/gamemode/vgui/*.lua", "LUA" ) ) do
@@ -51,12 +52,14 @@ net.Receive( "Botched.SendOpenMainMenu", function( len, ply )
             return
         else
             BOTCHED_MAINMENU:Open( page )
+            BOTCHED.FUNC.CompleteTutorialStep( 1, 1 )
         end
     else
         BOTCHED_MAINMENU = vgui.Create( "botched_mainmenu" )
+        BOTCHED.FUNC.CompleteTutorialStep( 1, 1 )
     end
 
-    if( page ) then
+    if( page != "" ) then
         BOTCHED_MAINMENU:SetPage( page )
     end
 
@@ -80,6 +83,11 @@ net.Receive( "Botched.SendFirstSpawn", function( len, ply )
 
         if( not IsValid( BOTCHED_LOGINREWARDS_MENU ) ) then
             BOTCHED_LOGINREWARDS_MENU = vgui.Create( "botched_popup_loginrewards" )
+        end
+
+        if( cookie.GetNumber( "BOTCHED.Cookie.LastTutorialCompleted", 0 ) < #BOTCHED.CONFIG.Tutorials and not IsValid( BOTCHED_TUTORIAL_POPUP ) ) then
+            BOTCHED_TUTORIAL_POPUP = vgui.Create( "botched_popup_tutorial" )
+            BOTCHED_TUTORIAL_POPUP:SetTutorial( cookie.GetNumber( "BOTCHED.Cookie.LastTutorialCompleted", 0 )+1 )
         end
     end )
 end )
@@ -119,7 +127,7 @@ function BOTCHED.FUNC.CreateChatHintTimer()
         end
 
         local val, key = table.Random( remainingHints )
-        chat.AddText( Color( 26, 188, 156 ), "[HINT] ", Color( 255, 255, 255 ), val )
+        chat.AddText( Color( 26, 188, 156 ), "[HINT] ", Color( 255, 255, 255 ), val[2] )
 
         table.remove( remainingHints, key )
     end )
@@ -131,8 +139,13 @@ function GM:HUDDrawTargetID()
 end
 
 hook.Add( "OnPlayerChat", "Botched.OnPlayerChat.ChatTags", function( ply, text, bTeam, bDead ) 
+    if( string.Trim( text ) == "//" )  then
+        return true
+    end
+
 	if( string.StartWith( text, "//" ) ) then
         text = string.TrimLeft( text, "//" )
+        text = string.Trim( text )
 
 		chat.AddText( Color( 52, 152, 219 ), "[GLOBAL] ", Color( 52, 73, 94 ), "[LVL " .. ply:GetLevel() .. "] ", Color( 149, 165, 166 ), ply:Nick() .. ": ", Color( 255, 255, 255 ), text )
 		return true
@@ -146,10 +159,66 @@ hook.Add( "OnPlayerChat", "Botched.OnPlayerChat.ChatTags", function( ply, text, 
     return true
 end )
 
-hook.Add( "PlayerConnect", "Botched.PlayerConnect.ChatMessages", function( name )
-	chat.AddText( Color( 231, 76, 60 ), "[SERVER] ", Color( 255, 255, 255 ), name .. " has connected to the server." )
+net.Receive( "Botched.SendPlayerConnected", function()
+    local name = net.ReadString()
+    local steamID = net.ReadString()
+
+    chat.AddText( Color( 231, 76, 60 ), "[SERVER] ", Color( 255, 255, 255 ), name .. " (" .. steamID .. ") has connected to the server." )
+end )
+
+net.Receive( "Botched.SendPlayerDisconnected", function()
+    local name = net.ReadString()
+    local steamID = net.ReadString()
+    local reason = net.ReadString()
+
+    chat.AddText( Color( 231, 76, 60 ), "[SERVER] ", Color( 255, 255, 255 ), name .. " (" .. steamID .. ") has disconnected from the server. (Reason: " .. reason .. ")" )
+end )
+
+hook.Add( "ChatText", "Botched.ChatText.DisableDefaults", function( index, name, text, type )
+	if( type == "joinleave" ) then return true end
 end )
 
 concommand.Add( "botched_removeonclose", function()
     BOTCHED_REMOVEONCLOSE = not BOTCHED_REMOVEONCLOSE
+end )
+
+function BOTCHED.FUNC.CompleteTutorialStep( tutorialKey, stepKey )
+    if( not IsValid( BOTCHED_TUTORIAL_POPUP ) ) then return end
+
+    local activeTutorialKey = BOTCHED_TUTORIAL_POPUP.tutorialKey
+    if( activeTutorialKey != tutorialKey ) then return end
+
+    local activeStepKey = BOTCHED_TUTORIAL_POPUP.stepKey
+    if( activeStepKey != stepKey ) then return end
+
+    local tutorialConfig = BOTCHED.CONFIG.Tutorials[tutorialKey]
+    if( not tutorialConfig.Steps[stepKey+1] ) then
+        cookie.Set( "BOTCHED.Cookie.LastTutorialCompleted", tutorialKey )
+
+        if( BOTCHED.CONFIG.Tutorials[tutorialKey+1] ) then
+            BOTCHED_TUTORIAL_POPUP:SetTutorial( tutorialKey+1 )
+        else
+            BOTCHED_TUTORIAL_POPUP:Remove()
+            notification.AddLegacy( "Tutorial completed!", 0, 5 )
+        end
+        return
+    end
+
+    BOTCHED_TUTORIAL_POPUP:SetStepKey( stepKey+1 )
+end
+
+hook.Add( "Botched.Hooks.ChosenEquipmentUpdated", "Botched.ChosenEquipmentUpdated.Tutorial", function()
+    local chosenEquipment = BOTCHED_CHOSEN_EQUIPMENT or {}
+	
+    if( BOTCHED.CONFIG.Equipment[chosenEquipment["pickaxe"] or ""] ) then
+        BOTCHED.FUNC.CompleteTutorialStep( 1, 4 )
+    end
+
+    if( BOTCHED.CONFIG.Equipment[chosenEquipment["hatchet"] or ""] ) then
+        BOTCHED.FUNC.CompleteTutorialStep( 1, 5 )
+    end
+
+    if( BOTCHED.CONFIG.Equipment[chosenEquipment["primaryWeapon"] or ""] ) then
+        BOTCHED.FUNC.CompleteTutorialStep( 1, 6 )
+    end
 end )

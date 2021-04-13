@@ -127,6 +127,8 @@ local function RebuildMapImage( updateFunc, finishFunc )
 end
 
 net.Receive( "Botched.SendMapSize", function()
+    local shouldOpenMap = net.ReadBool()
+
     BOTCHED.TEMP.Map = net.ReadTable()
 
     local curCaptureCount, totalCount = 0, 1
@@ -139,15 +141,17 @@ net.Receive( "Botched.SendMapSize", function()
     RebuildMapImage( function( nCurCaptureCount, nTotalCount )
         curCaptureCount, totalCount = nCurCaptureCount, nTotalCount
     end, function()
-        if( IsValid( popup:Close() ) ) then
+        if( IsValid( popup ) ) then
             popup:Close()
         end
 
-        if( IsValid( BOTCHED_MAPMENU ) ) then
-            BOTCHED_MAPMENU:Remove()
+        if( shouldOpenMap ) then
+            if( IsValid( BOTCHED_MAPMENU ) ) then
+                BOTCHED_MAPMENU:Remove()
+            end
+        
+            BOTCHED_MAPMENU = vgui.Create( "botched_popup_map" )
         end
-    
-        BOTCHED_MAPMENU = vgui.Create( "botched_popup_map" )
 
         if( IsValid( BOTCHED_HUD ) ) then
             if( IsValid( BOTCHED_HUD.map ) ) then
@@ -164,6 +168,7 @@ net.Receive( "Botched.SendOpenMap", function()
     local mapTable = BOTCHED.TEMP.Map
     if( not mapTable or not mapTable.SizeHeight or not mapTable.SizeW or not mapTable.SizeE or not mapTable.SizeS or not mapTable.SizeN ) then 
         net.Start( "Botched.RequestMapSize" )
+            net.WriteBool( true )
         net.SendToServer()
         return 
     end
@@ -174,6 +179,8 @@ net.Receive( "Botched.SendOpenMap", function()
     end
 
     BOTCHED_MAPMENU = vgui.Create( "botched_popup_map" )
+
+    BOTCHED.FUNC.CompleteTutorialStep( 3, 4 )
 end )
 
 net.Receive( "Botched.SendMapTeleport", function()
@@ -196,4 +203,8 @@ net.Receive( "Botched.SendMapTeleport", function()
         if( not IsValid( popup ) ) then return end
         popup:Close()
     end )
+
+    if( teleportKey == 3 ) then
+        BOTCHED.FUNC.CompleteTutorialStep( 3, 6 )
+    end
 end )

@@ -25,6 +25,7 @@ AddCSLuaFile( "cl_panelmeta.lua" )
 AddCSLuaFile( "cl_rewards.lua" )
 AddCSLuaFile( "cl_map.lua" )
 AddCSLuaFile( "cl_characters.lua" )
+AddCSLuaFile( "cl_party_system.lua" )
 
 -- SERVER LOAD --
 include( "sv_sqllite.lua" )
@@ -40,6 +41,7 @@ include( "sv_quests.lua" )
 include( "sv_rewards.lua" )
 include( "sv_map.lua" )
 include( "sv_characters.lua" )
+include( "sv_party_system.lua" )
 
 -- VGUI LOAD --
 for k, v in pairs( file.Find( GM.FolderName .. "/gamemode/vgui/*.lua", "LUA" ) ) do
@@ -118,13 +120,13 @@ function GM:PlayerInitialSpawn( ply )
                 if( not data ) then return end
 
                 local chosenEquipment = {
-                    primaryWeapon = data.primaryWeapon,
-                    secondaryWeapon = data.secondaryWeapon,
-                    pickaxe = data.pickaxe,
-                    hatchet = data.hatchet,
-                    armour = data.armour,
-                    trinket1 = data.trinket1,
-                    trinket2 = data.trinket2
+                    primaryWeapon = data.primaryWeapon != "NULL" and data.primaryWeapon,
+                    secondaryWeapon = data.secondaryWeapon != "NULL" and data.secondaryWeapon,
+                    pickaxe = data.pickaxe != "NULL" and data.pickaxe,
+                    hatchet = data.hatchet != "NULL" and data.hatchet,
+                    armour = data.armour != "NULL" and data.armour,
+                    trinket1 = data.trinket1 != "NULL" and data.trinket1,
+                    trinket2 = data.trinket2 != "NULL" and data.trinket2
                 }
 
                 ply:SetChosenEquipment( chosenEquipment )
@@ -301,6 +303,12 @@ function GM:ShowSpare1( ply )
     net.Send( ply )
 end
 
+util.AddNetworkString( "Botched.SendOpenPartyMenu" )
+function GM:ShowTeam( ply )
+    net.Start( "Botched.SendOpenPartyMenu" )
+    net.Send( ply )
+end
+
 function GM:ShowHelp( ply )
     if( ply:IsSuperAdmin() ) then
         if( ply:GetActiveWeapon():GetClass() != "weapon_admin_toolgun" ) then
@@ -403,4 +411,54 @@ hook.Add( "PlayerSelectSpawn", "Botched.PlayerSelectSpawn.Spawns", function( ply
 
     ply.HadFirstSpawn = true
 	return closestSpawn
+end )
+
+util.AddNetworkString( "Botched.SendPlayerConnected" )
+
+gameevent.Listen( "player_connect" )
+hook.Add( "player_connect", "Botched.player_connect.Connect", function( data )
+	net.Start( "Botched.SendPlayerConnected" )
+        net.WriteString( data.name )
+        net.WriteString( data.networkid )
+    net.Broadcast()
+end )
+
+util.AddNetworkString( "Botched.SendPlayerDisconnected" )
+
+gameevent.Listen( "player_disconnect" )
+hook.Add( "player_disconnect", "Botched.player_disconnect.Disconnect", function( data )
+	net.Start( "Botched.SendPlayerDisconnected" )
+        net.WriteString( data.name )
+        net.WriteString( data.networkid )
+        net.WriteString( data.reason )
+    net.Broadcast()
+end )
+
+concommand.Add( "restart_alert", function()
+    local timeIntervals = { 300, 240, 180, 120, 60, 45, 30, 15, 10, 5, 4, 3, 2, 1 }
+
+    local function SendAlert( timeLeft )
+        local message = "The server is restarting in " .. timeLeft/60 .. " minute" .. (timeLeft/60 != 1 and "s" or "") .. "!"
+        if( timeLeft < 60 ) then
+            message = "The server is restarting in " .. timeLeft .. " second" .. (timeLeft != 1 and "s" or "") .. "!"
+        end
+
+        print( "[RESTART] " .. message )
+
+        for k, v in ipairs( player.GetAll() ) do
+            v:SendNotification( 1, 5, message )
+        end
+    end
+
+    for k, v in ipairs( timeIntervals ) do
+        timer.Simple( timeIntervals[1]-v, function()
+            SendAlert( v )
+
+            if( k == #timeIntervals ) then
+                for k, v in ipairs( player.GetAll() ) do
+                    v:Kick( "Server restarting.\n\nYou can see update notes here: discord.gg/NAaTvpK8vQ" )
+                end
+            end
+        end )
+    end
 end )

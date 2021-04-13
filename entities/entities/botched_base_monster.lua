@@ -200,13 +200,4 @@ function ENT:OnKilled( dmginfo )
 	timer.Simple( 5, function()
 		body:Remove()
 	end )
-
-	local attacker = dmginfo:GetAttacker()
-	
-	if( IsValid( attacker ) and attacker:IsPlayer() ) then
-		local monsterConfig = BOTCHED.CONFIG.Monsters[self:GetMonsterClass()] or {}
-
-		attacker:AddExperience( monsterConfig.PlayerEXP )
-		attacker:SendExpNotification( monsterConfig.PlayerEXP, (monsterConfig.Name or "Monster") .. " Killed" )
-	end
 end

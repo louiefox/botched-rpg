@@ -463,8 +463,8 @@ function PANEL:CreateRightPages()
         { "Hatchet", "hatchet", Material( "materials/botched/icons/hatchet.png" ) },
         { "Primary", "primaryWeapon", Material( "materials/botched/icons/sword.png" ) },
         { "Secondary", "secondaryWeapon", Material( "materials/botched/icons/bow.png" ) },
-        { "Trinket 1", "trinket1", Material( "materials/botched/icons/book.png" ) },
-        { "Trinket 2", "trinket2", Material( "materials/botched/icons/ring.png" ) },
+        { "Trinket", "trinket1", Material( "materials/botched/icons/book.png" ) },
+        { "Ring", "trinket2", Material( "materials/botched/icons/ring.png" ) },
         { "Armour", "armour", Material( "materials/botched/icons/armor.png" ) }
     }
 
@@ -514,6 +514,10 @@ function PANEL:CreateEquipmentButton( title, equipmentType )
 end
 
 function PANEL:CreateEquipmentListPage( title, equipmentType, page )
+    if( equipmentType == "pickaxe" ) then
+        BOTCHED.FUNC.CompleteTutorialStep( 1, 3 )
+    end
+
     local scrollPanel = vgui.Create( "botched_scrollpanel", page )
     scrollPanel:Dock( FILL )
     scrollPanel:DockMargin( 25, 25, 25, 25 )

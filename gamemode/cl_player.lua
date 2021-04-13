@@ -207,3 +207,15 @@ net.Receive( "Botched.SendLoginRewardInfo", function()
 
     hook.Run( "Botched.Hooks.LoginRewardsUpdated" )
 end )
+
+-- PARTY FUNCTIONS --
+net.Receive( "Botched.SendPartyID", function()
+    local partyID = net.ReadUInt( 10 ) or 0
+    BOTCHED_PARTY_ID = partyID
+
+    if( partyID != 0 and not IsValid( BOTCHED_PARTYHUD ) ) then
+        BOTCHED_PARTYHUD = vgui.Create( "botched_hud_party" )
+    end
+
+    hook.Run( "Botched.Hooks.PartyIDUpdated" )
+end )

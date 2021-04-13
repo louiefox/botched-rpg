@@ -7,6 +7,9 @@ end
 function PANEL:FillPanel()
     local ply = LocalPlayer()
 
+    local expColor = Color( 46, 204, 113 )
+    local staminaColor = Color( 243, 156, 18 )
+
     local infoPanel = vgui.Create( "DPanel", self )
     infoPanel:SetSize( ScrW()*0.175, 90 )
     infoPanel:SetPos( 25, 25 )
@@ -29,9 +32,9 @@ function PANEL:FillPanel()
         local level, experience = ply:GetLevel(), ply:GetExperience()
         local nextLevelTable = BOTCHED.CONFIG.Levels[level+1]
         local requiredEXP = (nextLevelTable or {}).RequiredEXP or 1
-        draw.SimpleTextOutlined( "EXP " .. ply:GetExperience() .. "/" .. requiredEXP, "MontserratBold21", h+(w-h)/4, 0, Color(46, 204, 113), TEXT_ALIGN_CENTER, 0, 1, BOTCHED.FUNC.GetTheme( 1 ) )
+        draw.SimpleTextOutlined( "EXP " .. ply:GetExperience() .. "/" .. requiredEXP, "MontserratBold21", h+(w-h)/4, 0, expColor, TEXT_ALIGN_CENTER, 0, 1, BOTCHED.FUNC.GetTheme( 1 ) )
 
-        draw.SimpleTextOutlined( "STAMINA " .. ply:Stamina() .. "/" .. ply:GetMaxStamina(), "MontserratBold21", (w-(w-h)/4), 0, Color(243, 156, 18), TEXT_ALIGN_CENTER, 0, 1, BOTCHED.FUNC.GetTheme( 1 ) )
+        draw.SimpleTextOutlined( "STAMINA " .. ply:Stamina() .. "/" .. ply:GetMaxStamina(), "MontserratBold21", (w-(w-h)/4), 0, staminaColor, TEXT_ALIGN_CENTER, 0, 1, BOTCHED.FUNC.GetTheme( 1 ) )
 
         surface.SetFont( "MontserratBold40" )
         local levelX, levelY = surface.GetTextSize( ply:GetLevel() )
@@ -54,7 +57,6 @@ function PANEL:FillPanel()
     local expBar = vgui.Create( "DPanel", infoPanel.top )
     expBar:Dock( LEFT )
     expBar:SetWide( infoPanel.top:GetWide()/2 )
-    local expColor = Color( 46, 204, 113 )
     expBar.Paint = function( self2, w, h )
         local barW, barH = w*0.75, 16
         draw.RoundedBox( barH/2, (w/2)-(barW/2), (h/2)-(barH/2), barW, barH, BOTCHED.FUNC.GetTheme( 1 ) )
@@ -72,7 +74,6 @@ function PANEL:FillPanel()
     local staminaBar = vgui.Create( "DPanel", infoPanel.top )
     staminaBar:Dock( RIGHT )
     staminaBar:SetWide( infoPanel.top:GetWide()/2 )
-    local staminaColor = Color( 243, 156, 18 )
     staminaBar.Paint = function( self2, w, h )
         local barW, barH = w*0.75, 16
         draw.RoundedBox( barH/2, (w/2)-(barW/2), (h/2)-(barH/2), barW, barH, BOTCHED.FUNC.GetTheme( 1 ) )
@@ -255,6 +256,41 @@ function PANEL:FillPanel()
 
     linkPanel:AddLinkButton( Material( "materials/botched/icons/discord.png" ), "https://discord.gg/NAaTvpK8vQ" )
     linkPanel:AddLinkButton( Material( "materials/botched/icons/steam.png" ), "http://steamcommunity.com/groups/botched-rpg" )
+
+    surface.SetFont( "MontserratBold25" )
+    local textX = surface.GetTextSize( "HELP" )
+
+    local iconSize = BOTCHED.FUNC.ScreenScale( 16 )
+    local contentW = iconSize+textX+5
+
+    local helpButton = vgui.Create( "DButton", self )
+    helpButton:SetSize( contentW+30, BOTCHED.FUNC.ScreenScale( 40 ) )
+    helpButton:SetPos( self:GetWide()-helpButton:GetWide()-25, 25 )
+    helpButton:SetText( "" )
+    local helpMat = Material( "materials/botched/icons/hint_16.png" )
+    helpButton.Paint = function( self2, w, h )
+        self2:CreateFadeAlpha( false, 100 )
+
+        BSHADOWS.BeginShadow( "home_screen_help" )
+        local x, y = self2:LocalToScreen( 0, 0 )
+        draw.RoundedBox( 8, x, y, w, h, BOTCHED.FUNC.GetTheme( 1 ) )
+        BSHADOWS.EndShadow( "home_screen_help", x, y, 1, 2, 2, 255, 0, 0, false )
+
+        draw.RoundedBox( 8, 0, 0, w, h, BOTCHED.FUNC.GetTheme( 2, 100 ) )
+        draw.RoundedBox( 8, 0, 0, w, h, BOTCHED.FUNC.GetTheme( 3, self2.alpha ) )
+
+        BOTCHED.FUNC.DrawClickCircle( self2, w, h, BOTCHED.FUNC.GetTheme( 3 ), 8 )
+
+        surface.SetDrawColor( BOTCHED.FUNC.GetTheme( 4, 75+((self2.alpha/100)*180) ) )
+        surface.SetMaterial( helpMat )
+        surface.DrawTexturedRect( (w/2)-(contentW/2), (h/2)-(iconSize/2), iconSize, iconSize )
+
+        draw.SimpleText( "HELP", "MontserratBold25", (w/2)+(contentW/2), h/2-1, BOTCHED.FUNC.GetTheme( 4, 75+((self2.alpha/100)*180) ), TEXT_ALIGN_RIGHT, TEXT_ALIGN_CENTER )
+    end
+    helpButton.DoClick = function()
+        if( IsValid( BOTCHED_HELPMENU ) ) then return end
+        BOTCHED_HELPMENU = vgui.Create( "botched_popup_help" )
+    end
 
     self.navigationPanel = vgui.Create( "DPanel", self )
     self.navigationPanel:SetSize( 0, BOTCHED.FUNC.ScreenScale( 75 ) )

@@ -163,7 +163,7 @@ end
 
 -- LEVELLING FUNCTIONS --
 function playerMeta:SetLevel( level, dontSave )
-    self:SetNW2Int( "Level", level )
+    self:SetNWInt( "Level", level )
     
     if( not dontSave ) then
         BOTCHED.FUNC.SQLQuery( "UPDATE botched_players SET level = " .. level .. " WHERE userID = '" .. self:GetUserID() .. "';" )
@@ -177,7 +177,7 @@ function playerMeta:AddLevel( amount )
 end
 
 function playerMeta:SetExperience( experience, dontSave )
-    self:SetNW2Int( "Experience", experience )
+    self:SetNWInt( "Experience", experience )
     
     if( not dontSave ) then
         BOTCHED.FUNC.SQLQuery( "UPDATE botched_players SET experience = " .. experience .. " WHERE userID = '" .. self:GetUserID() .. "';" )
@@ -542,4 +542,30 @@ function playerMeta:SetSpeedMultiplier( multiplier )
     self:SetCrouchedWalkSpeed( 0.75*multiplier )
     self:SetWalkSpeed( 150*multiplier )
     self:SetRunSpeed( 200*multiplier )
+end
+
+-- PARTY FUNCTIONS --
+util.AddNetworkString( "Botched.SendPartyID" )
+function playerMeta:SetPartyID( partyID )
+	self.BOTCHED_PARTY_ID = partyID
+
+    net.Start( "Botched.SendPartyID" )
+        net.WriteUInt( partyID, 10 )
+    net.Send( self )
+end
+
+util.AddNetworkString( "Botched.SendPartyTable" )
+function playerMeta:SendPartyTable( partyID )
+    local partyTable = BOTCHED.FUNC.GetPartyTable( partyID )
+    if( not partyTable ) then return end
+
+    net.Start( "Botched.SendPartyTable" )
+        net.WriteUInt( partyID, 10 )
+        net.WriteEntity( partyTable.Leader )
+
+        net.WriteUInt( #partyTable.Members, 3 )
+        for k, v in ipairs( partyTable.Members ) do
+            net.WriteEntity( v )
+        end
+    net.Send( self )
 end

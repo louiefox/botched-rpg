@@ -10,7 +10,7 @@ function ENT:Use( ply )
 	if( CurTime() < (ply.BOTCHED_USE_COOLDOWN or 0) ) then return end
 	ply.BOTCHED_USE_COOLDOWN = CurTime()+0.1
 
-	if( not self.FarmTool ) then return end
+	if( not self.FarmTool or  self.FarmTool == "loading" ) then return end
 
 	if( (self.GetFallEndTime and self:GetFallEndTime() != 0) or ply:GetPos():DistToSqr( self:GetPos() ) > 5000 ) then return end
 

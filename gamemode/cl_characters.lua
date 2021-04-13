@@ -45,6 +45,14 @@ net.Receive( "Botched.SendUseAbility", function()
     BOTCHED_ABILITY_COOLDOWNS = BOTCHED_ABILITY_COOLDOWNS or {}
     BOTCHED_ABILITY_COOLDOWNS[abilityKey] = useTime
 
+    if( abilityKey == "charge" ) then
+        BOTCHED.FUNC.CompleteTutorialStep( 2, 2 )
+    end
+
+    if( abilityKey == "speed" ) then
+        BOTCHED.FUNC.CompleteTutorialStep( 2, 3 )
+    end
+
     hook.Run( "Botched.Hooks.HotbarSlotUsed" )
 end )
 

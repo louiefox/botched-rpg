@@ -20,7 +20,7 @@ function PANEL:OnSizeChanged( w, h )
     self.navigationContent:SetSize( w, h-self.navigationPanel:GetTall() )
 end
 
-function PANEL:AddPage( title, iconMat, panel, id )
+function PANEL:AddPage( title, iconMat, panel, id, openFunc )
     panel:SetParent( self.navigationContent )
     panel:SetSize( self.navigationContent:GetSize() )
 
@@ -56,7 +56,7 @@ function PANEL:AddPage( title, iconMat, panel, id )
         end
     end
 
-    self.pages[pageKey] = { panel, pageButton, id }
+    self.pages[pageKey] = { panel, pageButton, id, openFunc }
 
     if( self.activePage ) then
         panel:SetVisible( false )
@@ -96,6 +96,10 @@ function PANEL:SetActivePage( pageKey )
     if( panel.FillPanel and not panel.loaded ) then 
         panel:FillPanel() 
         panel.loaded = true
+    end
+
+    if( self.pages[pageKey][4] ) then
+        self.pages[pageKey][4]()
     end
 end
 

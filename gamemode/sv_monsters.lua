@@ -65,6 +65,48 @@ hook.Add( "EntityRemoved", "Botched.EntityRemoved.Monsters", function( ent )
     end
 end )
 
+hook.Add( "OnNPCKilled", "Botched.OnNPCKilled.Monsters", function( npc, attacker, inflictor )
+    if( not attacker:IsPlayer() or not npc.IsMonster ) then return end
+
+    local monsterClass = ""
+    if( npc.GetMonsterClass ) then
+        monsterClass = npc:GetMonsterClass()
+    end
+
+    local monsterConfig = BOTCHED.CONFIG.Monsters[monsterClass or ""] or {}
+    if( not monsterClass ) then return end
+
+    local rewardPlayers = { attacker }
+
+    local partyID = attacker:GetPartyID()
+    if( partyID != 0 ) then
+        local partyTable = BOTCHED.FUNC.GetPartyTable( partyID )
+        if( partyTable ) then
+            for k, v in ipairs( partyTable.Members ) do
+                if( not IsValid( v ) or v == attacker ) then continue end
+                table.insert( rewardPlayers, v )
+            end
+        end
+    end
+
+    for k, v in ipairs( rewardPlayers ) do
+        hook.Run( "Botched.Hooks.MonsterKilled", v, monsterClass, attacker == v )
+    end
+end )
+
+hook.Add( "Botched.Hooks.MonsterKilled", "Botched.MonsterKilled.Experience", function( ply, monsterClass, isAttacker )
+    local monsterConfig = BOTCHED.CONFIG.Monsters[monsterClass]
+
+    ply:AddExperience( monsterConfig.PlayerEXP )
+
+    local expText = (monsterConfig.Name or "Monster") .. " Killed"
+    if( not isAttacker ) then
+        expText = "Party Member Killed " .. (monsterConfig.Name or "Monster")
+    end
+
+    ply:SendExpNotification( monsterConfig.PlayerEXP, expText )
+end )
+
 -- PLAYER FUNCTIONS --
 local playerMeta = FindMetaTable( "Player" )
 

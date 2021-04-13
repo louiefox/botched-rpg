@@ -48,7 +48,9 @@ function PANEL:Init()
     end )
 
     local characterPage = vgui.Create( "botched_mainmenu_character", self.navigation )
-    self.navigation:AddPage( "CHARACTER", Material( "materials/botched/icons/character.png" ), characterPage, "character" )
+    self.navigation:AddPage( "CHARACTER", Material( "materials/botched/icons/character.png" ), characterPage, "character", function()
+        BOTCHED.FUNC.CompleteTutorialStep( 1, 2 )
+    end )
 
     local inventoryPage = vgui.Create( "botched_mainmenu_inventory", self.navigation )
     self.navigation:AddPage( "INVENTORY", Material( "materials/botched/icons/inventory.png" ), inventoryPage, "inventory" )
@@ -57,7 +59,9 @@ function PANEL:Init()
     self.navigation:AddPage( "CRAFTING", Material( "materials/botched/icons/crafting.png" ), craftingPage, "crafting" )
 
     local questsPage = vgui.Create( "botched_mainmenu_quests", self.navigation )
-    self.navigation:AddPage( "QUESTS", Material( "materials/botched/icons/quests.png" ), questsPage, "quests" )
+    self.navigation:AddPage( "QUESTS", Material( "materials/botched/icons/quests.png" ), questsPage, "quests", function()
+        BOTCHED.FUNC.CompleteTutorialStep( 3, 1 )
+    end )
 
     local gachaPage = vgui.Create( "botched_mainmenu_gacha", self.navigation )
     self.navigation:AddPage( "GACHA", Material( "materials/botched/icons/gacha_16.png" ), gachaPage, "gacha" )
@@ -119,6 +123,8 @@ function PANEL:Close()
             self:Remove()
         end
     end )
+
+    BOTCHED.FUNC.CompleteTutorialStep( 1, 7 )
 end
 
 function PANEL:OnSizeChanged( newW, newH )

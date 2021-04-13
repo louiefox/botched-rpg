@@ -27,6 +27,12 @@ end
 
 function SWEP:SetupDataTables()
 	self:NetworkVar( "Bool", 0, "IsHolstered" )
+
+	if( CLIENT ) then
+		self:NetworkVarNotify( "IsHolstered", function( ent, name, old, new ) 
+			BOTCHED.FUNC.CompleteTutorialStep( 2, 1 )
+		end )
+	end
 end
 
 function SWEP:PrimaryAttack()

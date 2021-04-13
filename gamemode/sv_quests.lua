@@ -40,10 +40,8 @@ end )
 
 util.AddNetworkString( "Botched.SendUpdateQuestProgress" )
 util.AddNetworkString( "Botched.SendQuestCompleted" )
-hook.Add( "OnNPCKilled", "Botched.OnNPCKilled.Quests", function( npc, attacker, inflictor )
-    if( not attacker:IsPlayer() ) then return end
-
-    local questInfo = attacker.BOTCHED_ACTIVE_QUEST
+hook.Add( "Botched.Hooks.MonsterKilled", "Botched.MonsterKilled.Quests", function( ply, monsterClass )
+    local questInfo = ply.BOTCHED_ACTIVE_QUEST
     if( not questInfo ) then return end
 
     local questLine = questInfo.QuestLine
@@ -52,11 +50,6 @@ hook.Add( "OnNPCKilled", "Botched.OnNPCKilled.Quests", function( npc, attacker, 
     local questLineConfig = BOTCHED.CONFIG.QuestsLines[questLine]
     local questConfig = questLineConfig.Quests[questKey]
     if( not questConfig ) then return end
-
-    local monsterClass = ""
-    if( npc.GetMonsterClass ) then
-        monsterClass = npc:GetMonsterClass()
-    end
 
     if( not questConfig.Monsters or not questConfig.Monsters[monsterClass] or (questInfo.QuestProgress.Monsters[monsterClass] or 0) >= questConfig.Monsters[monsterClass] ) then return end
 
@@ -71,11 +64,11 @@ hook.Add( "OnNPCKilled", "Botched.OnNPCKilled.Quests", function( npc, attacker, 
         net.Start( "Botched.SendUpdateQuestProgress" )
             net.WriteString( monsterClass )
             net.WriteUInt( questInfo.QuestProgress.Monsters[monsterClass], 16 )
-        net.Send( attacker )
+        net.Send( ply )
     else
-        local timeRemaining = timer.TimeLeft( "BOTCHED.Timer.QuestTimer." .. attacker:SteamID64() ) or 0
-        if( timer.Exists( "BOTCHED.Timer.QuestTimer." .. attacker:SteamID64() ) ) then
-            timer.Remove( "BOTCHED.Timer.QuestTimer." .. attacker:SteamID64() )
+        local timeRemaining = timer.TimeLeft( "BOTCHED.Timer.QuestTimer." .. ply:SteamID64() ) or 0
+        if( timer.Exists( "BOTCHED.Timer.QuestTimer." .. ply:SteamID64() ) ) then
+            timer.Remove( "BOTCHED.Timer.QuestTimer." .. ply:SteamID64() )
         end
 
         questInfo.Completed = true
@@ -83,7 +76,7 @@ hook.Add( "OnNPCKilled", "Botched.OnNPCKilled.Quests", function( npc, attacker, 
         local deaths = questInfo.Deaths or 0
         local completedStars = ((deaths == 0 and 3) or (deaths == 1 and 2)) or 1
 
-        local completedQuests = attacker:GetCompletedQuests()
+        local completedQuests = ply:GetCompletedQuests()
         local previousStars = (completedQuests[questLine] or {})[questKey] or 0
 
         questInfo.FirstClear = previousStars <= 0
@@ -117,7 +110,7 @@ hook.Add( "OnNPCKilled", "Botched.OnNPCKilled.Quests", function( npc, attacker, 
                 net.WriteString( k )
                 net.WriteUInt( v, 16 )
             end
-        net.Send( attacker )
+        net.Send( ply )
     end
 end )
 

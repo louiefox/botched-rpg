@@ -309,11 +309,69 @@ BOTCHED.CONFIG.SpawnPoints = {
 
 -- CHAT HINTS CONFIG --
 BOTCHED.CONFIG.ChatHints = {
-    "Press 'M' to open the world map and see your location as well as other useful locations.",
-    "You can holster your weapon with the reload key (R).",
-    "You can press 'Q' or 'F4' to open the main menu.",
-    "Stamina is replenished by 1 every minute, even when you disconnect!",
-    "You can receive rewards for time played on the server, check the main menu!",
-    "You can get rewards for logging in to the server daily. To see and claim your rewards click the 'Login Rewards' button in the main menu.",
-    "Put // before your chat message to use global chat so everyone can see your message."
+    { 
+        "World Map",
+        "Press 'M' to open the world map and see your location as well as other useful locations. You can also fast travel to certain areas of the map by clicking on the marker icon." 
+    },
+    { 
+        "Holstering Weapons",
+        "You can holster your weapon with the reload key (R) to put it on your back"
+    },
+    { 
+        "Stamina Regeneration",
+        "Stamina is replenished by 1 every minute, even when you disconnect! It is also refilled each time you level up."
+    },
+    { 
+        "Time Rewards",
+        "You can receive rewards for time played on the server, check the main menu!"
+    },
+    { 
+        "Login Rewards",
+        "You can get rewards for logging in to the server daily. To see and claim your rewards click the 'Login Rewards' button in the main menu."
+    },
+    { 
+        "Global Chat",
+        "Put // before your chat message to use global chat so everyone can see your message."
+    },
+    { 
+        "Parties",
+        "Press F2 to create or join a party as well as manage it. Party members will receive credit for your other members monster kills."
+    }
+}
+
+-- TUTORIAL CONFIG --
+BOTCHED.CONFIG.Tutorials = {
+    [1] = { 
+        Title = "The Basics",
+        Steps = {
+            [1] = "Open the main menu by pressing Q or F4.",
+            [2] = "This is where you can do most of the things in this gamemode. Click on the characters page.",
+            [3] = "You can equip weapons and equipment here. Lets start by equipping a pickaxe, click the top left slot.",
+            [4] = "Now click the pickaxe on the right and then equip it.",
+            [5] = "Lets also equip a hatchet, click the hatchet icon below the pickaxe icon. Now equip the hatchet.",
+            [6] = "Finally, lets equip a primary weapon, click the sword icon and then equip the 'Nail Bat'.",
+            [7] = "Good work, you can now close the main menu!"
+        }
+    },
+    [2] = { 
+        Title = "Basic Training",
+        Steps = {
+            [1] = "Now that you have equipped your equipment lets use it, first try holstering your weapon by pressing the reload key (R).",
+            [2] = "Now lets use some abilities, press 3 to use your charge ability.",
+            [3] = "Great, now press 9 to activate your speed increase for a few seconds."
+        }
+    },
+    [3] = { 
+        Title = "First Quest",
+        Steps = {
+            [1] = "Now thats sorted lets do our first quest, open the main menu again and go to the quests page.",
+            [2] = "This is where you can start quests. Click on the first quest 1-1.",
+            [3] = "You can see all the quest info here as well starting it, keep in mind quests use up stamina, press the start button and begin the quest.",
+            [4] = "The first quest takes place near the Outpost, close the main menu and press (M) to open the map.",
+            [5] = "This is the world map, you can see yourself and fast travel. Zoom out and click on the marker next to 'Outpost'.",
+            [6] = "Now click on the teleport button on the right and start the fast travel.",
+            [7] = "Now your at the outpost, look around till you see the quest marker, go there and start completing the quest shown in the top right!",
+            [8] = "Congrats on completing your first quest, now open the main menu and claim your rewards!"
+        }
+    }
 }

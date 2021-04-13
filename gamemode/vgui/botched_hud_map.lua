@@ -4,6 +4,7 @@ function PANEL:Init()
     local mapTable = BOTCHED.TEMP.Map
     if( not mapTable or not mapTable.SizeHeight or not mapTable.SizeW or not mapTable.SizeE or not mapTable.SizeS or not mapTable.SizeN ) then 
         net.Start( "Botched.RequestMapSize" )
+            net.WriteBool( false )
         net.SendToServer()
         return 
     end

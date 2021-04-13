@@ -31,6 +31,7 @@ AddSharedFile( "config/cfg_quests.lua" )
 
 AddSharedFile( "sh_player.lua" )
 AddSharedFile( "sh_weapons.lua" )
+AddSharedFile( "sh_party_system.lua" )
 
 function GM:Initialize()
 

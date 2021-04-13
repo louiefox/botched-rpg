@@ -62,8 +62,10 @@ util.AddNetworkString( "Botched.RequestMapSize" )
 util.AddNetworkString( "Botched.SendMapSize" )
 net.Receive( "Botched.RequestMapSize", function( len, ply )
     if( not BOTCHED.TEMP.Map ) then GenerateMapSize() end
+    local shouldOpenMap = net.ReadBool()
 
     net.Start( "Botched.SendMapSize" )
+        net.WriteBool( shouldOpenMap )
         net.WriteTable( BOTCHED.TEMP.Map )
     net.Send( ply )
 end )

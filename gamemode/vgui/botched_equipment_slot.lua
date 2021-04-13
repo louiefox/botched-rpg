@@ -150,7 +150,7 @@ function PANEL:Paint( w, h )
     draw.RoundedBox( 8, x, y, w, h, BOTCHED.FUNC.GetTheme( 2 ) )		
     BSHADOWS.EndShadow( self.uniqueID, x, y, 1, 1, 2, 255, 0, 0, false )
 
-    if( self.border ) then
+    if( self.border and self.border.Colors ) then
         BOTCHED.FUNC.DrawRoundedMask( 8, 0, 0, w, h, function()
             BOTCHED.FUNC.DrawGradientBox( 0, 0, w, h, 1, unpack( self.border.Colors ) )
         end )

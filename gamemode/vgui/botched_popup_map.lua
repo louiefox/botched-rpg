@@ -51,6 +51,7 @@ function PANEL:Init()
             end
             
             net.Start( "Botched.RequestMapSize" )
+                net.WriteBool( true )
             net.SendToServer()
         end, "No" )
     end
@@ -220,6 +221,10 @@ function PANEL:Init()
             surface.DrawTexturedRect( (w/2)-(iconSize/2), (h/2)-(iconSize/2), iconSize, iconSize )
         end
         teleportMarker.DoClick = function()
+            if( k == 3 ) then
+                BOTCHED.FUNC.CompleteTutorialStep( 3, 5 )
+            end
+
             self:OpenSidePage( "teleport_" .. k, function( parent )
                 local teleportButton = vgui.Create( "DButton", parent )
                 teleportButton:Dock( BOTTOM )

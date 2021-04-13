@@ -13,7 +13,7 @@ function PANEL:Init()
     self.centerArea:SetSize( self:GetPopupWide(), self.mainPanel.targetH )
     self.centerArea.Paint = function( self, w, h ) end 
 
-    self.slotSize = 110
+    self.slotSize = BOTCHED.FUNC.ScreenScale( 110 )
 end
 
 local star24Mat = Material( "materials/botched/icons/star_24.png" )
@@ -33,6 +33,10 @@ function PANEL:SetQuestInfo( questLineKey, questKey )
 
     local quest = questLine.Quests[questKey]
     if( not quest ) then return end
+
+    if( questLineKey == 1 and questKey == 1 ) then
+        BOTCHED.FUNC.CompleteTutorialStep( 3, 2 )
+    end
 
     local completedQuests = LocalPlayer():GetCompletedQuests()
     local completedStars = (completedQuests[questLineKey] or {})[questKey] or 0
@@ -97,10 +101,12 @@ function PANEL:SetQuestInfo( questLineKey, questKey )
             rowSlot:DockMargin( 10, 0, 0, 0 )
             rowSlot.borderSize = 2
             rowSlot.Paint = function( self2, w, h ) 
-                BSHADOWS.BeginShadow( name .. i, self:GetShadowBounds() )
-                local x, y = self2:LocalToScreen( 0, 0 )
-                draw.RoundedBox( 8, x, y, w, h, BOTCHED.FUNC.GetTheme( 1 ) )		
-                BSHADOWS.EndShadow( name .. i, x, y, 1, 1, 2, 255, 0, 0, false )
+                if( self.mainPanel:GetTall() == self.mainPanel.targetH ) then
+                    BSHADOWS.BeginShadow( name .. i, self:GetShadowBounds() )
+                    local x, y = self2:LocalToScreen( 0, 0 )
+                    draw.RoundedBox( 8, x, y, w, h, BOTCHED.FUNC.GetTheme( 1 ) )		
+                    BSHADOWS.EndShadow( name .. i, x, y, 1, 1, 2, 255, 0, 0, false )
+                end
             
                 if( self2.border ) then
                     BOTCHED.FUNC.DrawRoundedMask( 8, 0, 0, w, h, function()

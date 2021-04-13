@@ -67,11 +67,11 @@ end
 
 -- LEVELLING FUNCTIONS --
 function playerMeta:GetLevel()
-	return self:GetNW2Int( "Level", 1 )
+	return self:GetNWInt( "Level", 1 )
 end
 
 function playerMeta:GetExperience()
-	return self:GetNW2Int( "Experience", 0 )
+	return self:GetNWInt( "Experience", 0 )
 end
 
 -- CHARACTER FUNCTIONS --
@@ -96,6 +96,8 @@ function playerMeta:GetChosenEquipment()
 end
 
 function playerMeta:GetChosenWeapon( equipmentKey )
+	if( not equipmentKey ) then return end
+	
 	local chosenEquipment = self:GetChosenEquipment()
 	local weaponClass = (BOTCHED.CONFIG.Equipment[chosenEquipment[equipmentKey] or ""] or {}).Class
 
@@ -192,4 +194,9 @@ end
 
 function playerMeta:GetAbilityCooldowns()
 	return (CLIENT and BOTCHED_ABILITY_COOLDOWNS or self.BOTCHED_ABILITY_COOLDOWNS) or {}
+end
+
+-- PARTY FUNCTIONS --
+function playerMeta:GetPartyID()
+	return (CLIENT and BOTCHED_PARTY_ID or self.BOTCHED_PARTY_ID) or 0
 end

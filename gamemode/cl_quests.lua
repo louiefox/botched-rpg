@@ -34,6 +34,10 @@ net.Receive( "Botched.SendStartQuest", function( len, ply )
 
     BOTCHED_QUESTHUD:UpdateQuestProgress( questInfo.QuestProgress )
     BOTCHED_QUESTHUD:SetActiveQuest( questInfo.QuestLine, questInfo.QuestKey )
+
+    if( questInfo.QuestLine == 1 and questInfo.QuestKey == 1 ) then
+        BOTCHED.FUNC.CompleteTutorialStep( 3, 3 )
+    end
 end )
 
 net.Receive( "Botched.SendQuestFailed", function( len, ply )
@@ -91,9 +95,17 @@ net.Receive( "Botched.SendQuestCompleted", function( len, ply )
     BOTCHED_QUESTHUD:SetQuestCompleted( BOTCHED_ACTIVE_QUEST.QuestLine, BOTCHED_ACTIVE_QUEST.QuestKey )
 
     notification.AddLegacy( "Quest successfully completed!", 0, 5 )
+
+    if( activeQuest.QuestLine == 1 and activeQuest.QuestKey == 1 ) then
+        BOTCHED.FUNC.CompleteTutorialStep( 3, 7 )
+    end
 end )
 
 net.Receive( "Botched.SendQuestClaimed", function( len, ply )
+    if( BOTCHED_ACTIVE_QUEST and BOTCHED_ACTIVE_QUEST.QuestLine == 1 and BOTCHED_ACTIVE_QUEST.QuestKey == 1 ) then
+        BOTCHED.FUNC.CompleteTutorialStep( 3, 8 )
+    end
+
     BOTCHED_ACTIVE_QUEST = nil
 
     if( IsValid( BOTCHED_QUESTHUD ) ) then
