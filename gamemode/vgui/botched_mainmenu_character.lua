@@ -149,9 +149,13 @@ function PANEL:SetRightPage( identifier )
         self.rightPages[identifier].Filled = true
         self.rightPages[identifier].FillPage()
     end
+
+    if( self.rightPages[identifier].clickFunc ) then
+        self.rightPages[identifier].clickFunc()
+    end
 end
 
-function PANEL:CreateRightPage( identifier, iconMat, panelFunc )
+function PANEL:CreateRightPage( identifier, iconMat, panelFunc, clickFunc )
     local page = vgui.Create( "DPanel", self.navigationContent )
     page:Dock( FILL )
     page:SetSize( self.navigationContent:GetSize() )
@@ -159,6 +163,7 @@ function PANEL:CreateRightPage( identifier, iconMat, panelFunc )
     page.FillPage = function() 
         panelFunc( page )
     end
+    page.clickFunc = clickFunc
 
     page:SetVisible( false )
 
@@ -471,6 +476,10 @@ function PANEL:CreateRightPages()
     for k, v in ipairs( equipmentPages ) do
         self:CreateRightPage( "equipment_" .. v[2], v[3], function( page ) 
             self:CreateEquipmentListPage( v[1], v[2], page )
+        end, function()
+            if( v[2] == "pickaxe" ) then
+                BOTCHED.FUNC.CompleteTutorialStep( 1, 3 )
+            end
         end )
     end
 end
@@ -514,10 +523,6 @@ function PANEL:CreateEquipmentButton( title, equipmentType )
 end
 
 function PANEL:CreateEquipmentListPage( title, equipmentType, page )
-    if( equipmentType == "pickaxe" ) then
-        BOTCHED.FUNC.CompleteTutorialStep( 1, 3 )
-    end
-
     local scrollPanel = vgui.Create( "botched_scrollpanel", page )
     scrollPanel:Dock( FILL )
     scrollPanel:DockMargin( 25, 25, 25, 25 )
