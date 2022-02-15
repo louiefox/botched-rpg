@@ -65,7 +65,7 @@ hook.Add( "HUDPaint", "Botched.HUDPaint.Monsters", function()
 end )
 
 net.Receive( "Botched.SendAdminMonsterSpawns", function()
-    if( not IsValid( LocalPlayer() ) or not LocalPlayer():IsSuperAdmin() ) then return end
+    if( not IsValid( LocalPlayer() ) or not LocalPlayer():HasAdminPrivilege() ) then return end
 
     BOTCHED.MonsterSpawns = net.ReadTable() or {}
 

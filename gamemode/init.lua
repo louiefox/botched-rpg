@@ -52,10 +52,6 @@ DEFINE_BASECLASS( "gamemode_base" )
 
 util.AddNetworkString( "Botched.SendFirstSpawn" )
 function GM:PlayerInitialSpawn( ply )
-    if( GAMEMODE.Developers[ply:SteamID64()] ) then
-        ply:SetUserGroup( "superadmin" )
-    end
-
     BOTCHED.FUNC.SQLQuery( "SELECT * FROM botched_players WHERE steamID64 = '" .. ply:SteamID64() .. "';", function( data )
         if( data ) then
             local userID = tonumber( data.userID or "" ) or 1 
@@ -282,8 +278,9 @@ function GM:PlayerLoadout( ply )
         end
     end
 
-    if( ply:IsSuperAdmin() ) then
+    if( ply:HasAdminPrivilege() ) then
         ply:Give( "weapon_admin_toolgun" )
+        print("REACHED")
     end
 
     ply:SelectPrimaryWeapon()
@@ -310,7 +307,7 @@ function GM:ShowTeam( ply )
 end
 
 function GM:ShowHelp( ply )
-    if( ply:IsSuperAdmin() ) then
+    if( ply:HasAdminPrivilege() ) then
         if( ply:GetActiveWeapon():GetClass() != "weapon_admin_toolgun" ) then
             ply:SelectWeapon( "weapon_admin_toolgun" )
         else
@@ -320,7 +317,7 @@ function GM:ShowHelp( ply )
 end
 
 local menuKeys = {
-    [KEY_Q] = "",
+    [KEY_B] = "",
     [KEY_I] = "inventory",
     [KEY_C] = "character"
 }

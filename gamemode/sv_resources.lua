@@ -20,7 +20,7 @@ end
 
 function BOTCHED.FUNC.SendAdminsResourceSpawns()
     for k, v in ipairs( player.GetAll() ) do
-        if( v:IsSuperAdmin() ) then
+        if( v:HasAdminPrivilege() ) then
             v:SendResourceSpawns()
         end
     end

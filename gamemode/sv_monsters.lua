@@ -20,7 +20,7 @@ end
 
 function BOTCHED.FUNC.SendAdminsMonsterSpawns()
     for k, v in ipairs( player.GetAll() ) do
-        if( v:IsSuperAdmin() ) then
+        if( v:HasAdminPrivilege() ) then
             v:SendMonsterSpawns()
         end
     end

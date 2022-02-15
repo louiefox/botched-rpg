@@ -200,3 +200,14 @@ end
 function playerMeta:GetPartyID()
 	return (CLIENT and BOTCHED_PARTY_ID or self.BOTCHED_PARTY_ID) or 0
 end
+
+/*
+	Function - Privilege checking
+*/
+function playerMeta:HasAdminPrivilege()
+	if (BOTCHED.CONFIG.UseInBuiltSystem) then
+		return (table.HasValue(BOTCHED.CONFIG.GameMasters, self:SteamID64()) and true) or false
+	else 
+		return (table.HasValue(BOTCHED.CONFIG.ThirdPartyRanks, self:GetUsergroup()) and true) or false
+	end
+end

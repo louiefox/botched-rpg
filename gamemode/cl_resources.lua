@@ -1,5 +1,5 @@
 net.Receive( "Botched.SendAdminResourceSpawns", function()
-    if( not LocalPlayer():IsSuperAdmin() ) then return end
+    if( not LocalPlayer():HasAdminPrivilege() ) then return end
 
     BOTCHED.ResourceSpawns = net.ReadTable() or {}
 

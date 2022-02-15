@@ -81,7 +81,7 @@ adminCommands["giveplayermodel"] = {
 }
 
 concommand.Add( "botched_admincmd", function( ply, cmd, args )
-    if( IsValid( ply ) and not ply:IsSuperAdmin() ) then return end
+    if( IsValid( ply ) and not ply:HasAdminPrivilege() ) then return end
 
     local commandTable = adminCommands[args[1] or ""]
     if( not commandTable ) then return end

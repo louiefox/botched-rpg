@@ -240,7 +240,7 @@ function SWEP:PrimaryAttack()
 
 	local ply = self:GetOwner()
 	
-	if( not IsValid( ply ) or not ply:IsSuperAdmin() or not ply:GetEyeTrace() ) then return end
+	if( not IsValid( ply ) or not ply:HasAdminPrivilege() or not ply:GetEyeTrace() ) then return end
 
 	local trace = ply:GetEyeTrace()
 
@@ -261,7 +261,7 @@ function SWEP:SecondaryAttack()
 
 	local ply = self:GetOwner()
 	
-	if( not IsValid( ply ) or not ply:IsSuperAdmin() or not ply:GetEyeTrace() ) then return end
+	if( not IsValid( ply ) or not ply:HasAdminPrivilege() or not ply:GetEyeTrace() ) then return end
 
 	local trace = ply:GetEyeTrace()
 
@@ -272,7 +272,7 @@ function SWEP:SecondaryAttack()
 end
 
 function SWEP:Reload()
-	if( not CLIENT or not LocalPlayer():IsSuperAdmin() ) then return end
+	if( not CLIENT or not LocalPlayer():HasAdminPrivilege() ) then return end
 
 	if( IsValid( self.popupPanel ) ) then return end
 
@@ -424,7 +424,7 @@ if( CLIENT ) then
 elseif( SERVER ) then
 	util.AddNetworkString( "Botched.SendAdminToolMode" )
 	net.Receive( "Botched.SendAdminToolMode", function( len, ply )
-		if( not ply:IsSuperAdmin() ) then return end
+		if( not ply:HasAdminPrivilege() ) then return end
 
 		local modeKey = net.ReadUInt( 8 )
 		local adminTool = ply:GetWeapon( "weapon_admin_toolgun" )
@@ -447,7 +447,7 @@ elseif( SERVER ) then
 
 	util.AddNetworkString( "Botched.SendAdminToolReqInfo" )
 	net.Receive( "Botched.SendAdminToolReqInfo", function( len, ply )
-		if( not ply:IsSuperAdmin() ) then return end
+		if( not ply:HasAdminPrivilege() ) then return end
 
 		local reqInfoKey = net.ReadUInt( 8 )
 		local adminTool = ply:GetWeapon( "weapon_admin_toolgun" )

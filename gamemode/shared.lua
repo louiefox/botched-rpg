@@ -1,10 +1,7 @@
-GM.Name = "Botched RPG"
-GM.Author = "Brickwall"
+GM.Name = "gMMO"
+GM.Author = "Brickwall & dotCore"
 GM.Email = "N/A"
-GM.Website = "brickwall.dev"
-GM.Developers = {
-    ["76561198070943403"] = true
-}
+GM.Website = "waurum.net"
 
 BOTCHED = {
     FUNC = {},
@@ -20,6 +17,7 @@ end
 AddSharedFile( "sh_devconfig.lua" )
 
 AddSharedFile( "config/cfg_main.lua" )
+AddSharedFile( "config/cfg_admin.lua" )
 AddSharedFile( "config/cfg_levelling.lua" )
 AddSharedFile( "config/cfg_characters.lua" )
 AddSharedFile( "config/cfg_equipment.lua" )
@@ -143,3 +141,5 @@ end
 function BOTCHED.FUNC.UTCTime()
 	return os.time( os.date( "!*t" ) )
 end
+
+// test
