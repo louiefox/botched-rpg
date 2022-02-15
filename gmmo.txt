@@ -1,0 +1,7 @@
+"gmmo"
+{
+	"base"		"base"
+	"title"		"gMMO"
+	"category"	"pve"
+	"menusystem"	"1"
+}
