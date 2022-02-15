@@ -1,5 +1,6 @@
 // Use gMMO privilege system
 BOTCHED.CONFIG.UseInBuiltSystem = true
+BOTCHED.CONFIG.CommandsPrefix = "!"
 
 // Use an external administration system
 BOTCHED.CONFIG.UseThirdPartyMods = false
