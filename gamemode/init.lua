@@ -6,7 +6,7 @@ AddCSLuaFile( "shared.lua" )
 include( "shared.lua" )
 
 -- CLIENT LOAD --
-AddCSLuaFile( "client/cl_init.lua" )
+AddCSLuaFile( "cl_init.lua" )
 AddCSLuaFile( "client/cl_bshadows.lua" )
 AddCSLuaFile( "client/cl_drawing.lua" )
 AddCSLuaFile( "client/cl_fonts.lua" )
