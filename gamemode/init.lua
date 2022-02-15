@@ -280,7 +280,6 @@ function GM:PlayerLoadout( ply )
 
     if( ply:HasAdminPrivilege() ) then
         ply:Give( "weapon_admin_toolgun" )
-        print("REACHED")
     end
 
     ply:SelectPrimaryWeapon()
