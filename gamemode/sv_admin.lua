@@ -92,7 +92,10 @@ adminCommands["giveplayermodel"] = {
     Register new console commands let's go
 */
 concommand.Add("gmmo", function(ply, cmd, args)
-    if (IsValid(ply) and not ply:HasAdminPrivilege())  then return end
+    if (IsValid(ply) and not ply:HasAdminPrivilege()) then 
+        ply:SendNotification(1, 5, "You don't have the permission to use this!")
+        return 
+    end
 
     local commandTable = adminCommands[args[1] or ""]
     if (not commandTable) then return end
