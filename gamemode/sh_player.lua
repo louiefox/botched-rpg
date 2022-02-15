@@ -206,8 +206,8 @@ end
 */
 function playerMeta:HasAdminPrivilege()
 	if (BOTCHED.CONFIG.UseInBuiltSystem) then
-		return (table.HasValue(BOTCHED.CONFIG.GameMasters, self:SteamID64()) and true) or false
-	else 
-		return (table.HasValue(BOTCHED.CONFIG.ThirdPartyRanks, self:GetUsergroup()) and true) or false
+		return (table.HasValue(BOTCHED.CONFIG.GameMasters, self:SteamID64()) and true) or false and self:SendNotification(1, 5, "You don't have the permission!")
+	else
+		return (table.HasValue(BOTCHED.CONFIG.ThirdPartyRanks, self:GetUsergroup()) and true) or false and self:SendNotification(1, 5, "You don't have the permission!")
 	end
 end
