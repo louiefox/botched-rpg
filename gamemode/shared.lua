@@ -14,7 +14,7 @@ local function AddSharedFile( filePath )
 	include( filePath )
 end
 
-AddSharedFile( "sh_devconfig.lua" )
+AddSharedFile( "shared/sh_devconfig.lua" )
 
 AddSharedFile( "config/cfg_main.lua" )
 AddSharedFile( "config/cfg_admin.lua" )
@@ -27,9 +27,9 @@ AddSharedFile( "config/cfg_store.lua" )
 AddSharedFile( "config/cfg_monsters.lua" )
 AddSharedFile( "config/cfg_quests.lua" )
 
-AddSharedFile( "sh_player.lua" )
-AddSharedFile( "sh_weapons.lua" )
-AddSharedFile( "sh_party_system.lua" )
+AddSharedFile( "shared/sh_player.lua" )
+AddSharedFile( "shared/sh_weapons.lua" )
+AddSharedFile( "shared/sh_party_system.lua" )
 
 function GM:Initialize()
 
